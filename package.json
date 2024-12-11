@@ -3,12 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "express": "^4.21.0"
+    "express": "^4.21.0",
+    "mongodb": "^6.10.0",
+    "mongoose": "^8.8.2",
+    "nodemon": "^3.1.7"
   }
 }
