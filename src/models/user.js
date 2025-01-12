@@ -4,6 +4,8 @@ const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
     required: true,
+    minLength: 4,
+    maxLength: 50,
   },
   lastName: {
     type: String,
@@ -12,6 +14,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    lowercase: true,
+    trim: true,
   },
   password: {
     type: String,
@@ -19,12 +23,20 @@ const userSchema = new mongoose.Schema({
   },
   age: {
     type: Number,
+    min: 18,
   },
   gender: {
     type: String,
+    validate(value) {
+      if (!["male", "female", "others"].includes(value)) {
+        throw new Error("Gender data is not valid");
+      }
+    },
   },
   photoUrl: {
     type: String,
+    default:
+      "https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=mail@ashallendesign.co.uk",
   },
   about: {
     type: String,
