@@ -1,0 +1,54 @@
+const express = require("express");
+const User = require("../models/user");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const { validateSignupData } = require("../utils/validation");
+
+const authRouter = express.Router();
+
+authRouter.post("/signup", async (req, res) => {
+  try {
+    // validation of data
+    validateSignupData(req);
+
+    const { firstName, lastName, emailId, password } = req.body;
+    // Encrypt the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // creating a new instance of the user model
+    const user = new User({
+      firstName,
+      lastName,
+      emailId,
+      password: hashedPassword,
+    });
+    await user.save();
+    res.send("User added successfully!!");
+  } catch (err) {
+    res.status(400).send("ERROR: " + err.message);
+  }
+});
+
+authRouter.post("/login", async (req, res) => {
+  try {
+    const { emailId, password } = req.body;
+    const user = await User.findOne({ emailId: emailId });
+    if (!user) {
+      throw new Error("Invalid Credentials");
+    }
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (isPasswordValid) {
+      const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET_KEY, {
+        expiresIn: "1d",
+      });
+      res.cookie("token", token);
+      res.send("Login Success!");
+    } else {
+      throw new Error("Invalid Credentials");
+    }
+  } catch (err) {
+    res.status(400).send("ERROR: " + err.message);
+  }
+});
+
+module.exports = authRouter;
