@@ -2,6 +2,7 @@ const express = require("express");
 const { userAuth } = require("../middlewares/auth");
 const User = require("../models/user");
 const { validateEditProfileData } = require("../utils/validation");
+const bcrypt = require("bcrypt");
 const profileRouter = express.Router();
 
 profileRouter.get("/profile/view", userAuth, async (req, res) => {
@@ -20,14 +21,31 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
     }
     const loggedInUser = req.user;
 
-    Object.keys(req.body).forEach((key) => (loggedInUser[key] = req.body[key]));
-
-    await loggedInUser.save();
+    Object.keys(req.body).forEach((key) => (loggedInUser[key] = req.body[key])); // update
+    await loggedInUser.save(); // save update
 
     res.json({
       message: "Profile update successfully!",
       data: loggedInUser,
     });
+  } catch (err) {
+    res.status(400).send("ERROR: " + err.message);
+  }
+});
+
+// my code
+profileRouter.patch("/profile/updatePassword", userAuth, async (req, res) => {
+  try {
+    const loggedInUser = req.user;
+    const { password } = req.body;
+
+    if (!password) {
+      throw new Error("Password is required!");
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    loggedInUser.password = hashedPassword; // update password
+    await loggedInUser.save(); // save
+    res.json({ message: "Password updated successfully!", data: loggedInUser });
   } catch (err) {
     res.status(400).send("ERROR: " + err.message);
   }

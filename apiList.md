@@ -10,7 +10,7 @@ authRouter
 
 - GET /profile/view
 - PATCH /profile/edit
-- PATCH /profile/password
+- PATCH /profile/updatePassword (update password)
 
 ## connectionRequestRouter
 
