@@ -8,8 +8,8 @@ authRouter
 
 ## profileRouter
 
-- GET /profile (view)
-- PATCH /profile (edit)
+- GET /profile/view
+- PATCH /profile/edit
 - PATCH /profile/password
 
 ## connectionRequestRouter
