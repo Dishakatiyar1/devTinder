@@ -21,8 +21,8 @@ authRouter
 
 ## userRouter
 
-- GET /user/connections
-- GET /user/requests
+- GET /user/requests/received (get all the connection requests - "interested")
+- GET /user/connections (get all the connections - "accepted")
 - GET /user/feed (gets the profiles of other users on platform)
 
 Status: Ignored, Interested, Accepted, Rejected
