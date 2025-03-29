@@ -27,14 +27,16 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
     const loggedInUser = req.user;
     const connectionRequests = await ConnectionRequest.find({
       $or: [
-        { toUserId: loggedInUser._id, status: "accepted" },
-        { fromUserId: loggedInUser._id, status: "accepted" },
+        { toUserId: loggedInUser._id, status: "accepted" }, // request sent by someone else to me
+        { fromUserId: loggedInUser._id, status: "accepted" }, // request sent by me to someone, now both are my connections
       ],
     })
-      .populate("fromUserId", ["firstName", "lastName"])
+      .populate("fromUserId", ["firstName", "lastName"]) // mongodb allows to connect models like sql
       .populate("toUserId", ["firstName", "lastName"]);
 
+    // convert data to array of objects having first, last name and _id only
     const data = connectionRequests?.map((row) => {
+      // if request send by me then return toUserId details otherwise fromUserId details
       if (row.fromUserId?._id.toString() === loggedInUser._id.toString()) {
         return row.toUserId;
       }
