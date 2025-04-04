@@ -11,7 +11,7 @@ userRouter.get("/user/requests/received", userAuth, async (req, res) => {
     const connectionRequests = await ConnectionRequest.find({
       toUserId: loggedInUser._id,
       status: "interested",
-    }).populate("fromUserId", ["firstName", "lastName"]);
+    }).populate("fromUserId", ["firstName", "lastName", "photoUrl"]);
 
     res.json({
       message: "Data fetched successfully!",
@@ -31,8 +31,8 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
         { fromUserId: loggedInUser._id, status: "accepted" }, // request sent by me to someone, now both are my connections
       ],
     })
-      .populate("fromUserId", ["firstName", "lastName"]) // mongodb allows to connect models like sql
-      .populate("toUserId", ["firstName", "lastName"]);
+      .populate("fromUserId", ["firstName", "lastName", "photoUrl"]) // mongodb allows to connect models like sql
+      .populate("toUserId", ["firstName", "lastName", "photoUrl"]);
 
     // convert data to array of objects having first, last name and _id only
     const data = connectionRequests?.map((row) => {
