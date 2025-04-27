@@ -17,7 +17,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://dev-tinder-web-sigma.vercel.app",
-      "http://43.204.112.136/",
+      "http://43.204.112.136",
     ],
     credentials: true,
   })
