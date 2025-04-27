@@ -49,9 +49,11 @@ authRouter.post("/login", async (req, res) => {
         expiresIn: "1d",
       });
       res.cookie("token", token, {
-        secure: true,
-        sameSite: "None",
+        secure: false,
+        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+        httpOnly: true,
       });
+
       res.send(user);
     } else {
       throw new Error("Invalid Credentials");
