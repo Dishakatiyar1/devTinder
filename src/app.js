@@ -33,7 +33,7 @@ app.use("/", userRouter);
 connectDB()
   .then(() => {
     console.log("Database connected successfullly!");
-    app.listen(8000, "0.0.0.0", () => {
+    app.listen(process.env.PORT, "0.0.0.0", () => {
       console.log("server listening to the port 8000");
     });
   })
