@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const { validateSignupData } = require("../utils/validation");
 
 const authRouter = express.Router();
+const isProduction = process.env.NODE_ENV === "production";
 
 authRouter.post("/signup", async (req, res) => {
   try {
@@ -49,8 +50,8 @@ authRouter.post("/login", async (req, res) => {
         expiresIn: "1d",
       });
       res.cookie("token", token, {
-        secure: false,
-        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+        secure: isProduction,
+        sameSite: isProduction ? "None" : "Lax",
         httpOnly: true,
       });
 
