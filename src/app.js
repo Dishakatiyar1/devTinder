@@ -7,6 +7,8 @@ const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
 const userRouter = require("./routes/user");
 const cors = require("cors");
+const http = require("http");
+const initializeSocket = require("./utils/socket");
 
 dotenv.config();
 
@@ -25,6 +27,9 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+const server = http.createServer(app);
+initializeSocket(server);
+
 app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);
@@ -33,7 +38,7 @@ app.use("/", userRouter);
 connectDB()
   .then(() => {
     console.log("Database connected successfullly!");
-    app.listen(process.env.PORT, "0.0.0.0", () => {
+    server.listen(process.env.PORT, "0.0.0.0", () => {
       console.log("server listening to the port 8000");
     });
   })
