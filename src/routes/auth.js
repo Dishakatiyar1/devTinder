@@ -70,4 +70,5 @@ authRouter.post("/logout", (req, res) => {
   });
   res.send("Logout successful!");
 });
+
 module.exports = authRouter;
