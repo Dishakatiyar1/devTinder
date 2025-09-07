@@ -58,13 +58,19 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
   }
   // update my payment status in DB
   const paymentDetails = req.body.payload.payment.entity;
-  const payment = await payment.findOne({ orderId: paymentDetails.order_id });
-  await payment.save();
+  const paymentRecord = await Payment.findOne({
+    orderId: paymentDetails.order_id,
+  });
+  if (!paymentRecord) {
+    return res.status(404).json({ msg: "Payment record not found" });
+  }
+  paymentRecord.status = paymentDetails.status;
+  await paymentRecord.save();
 
   // Update the user as premium
-  const user = await User.findOne({ _id: payment.userId });
+  const user = await User.findOne({ _id: paymentRecord.userId });
   user.isPremium = true;
-  user.membershipType = payment.notes.membershipType;
+  user.membershipType = paymentRecord.notes.membershipType;
   await user.save();
 
   // if (req.body.event === "payment.captured") {
