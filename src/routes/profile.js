@@ -9,7 +9,7 @@ profileRouter.get("/profile/view", userAuth, async (req, res) => {
   try {
     const user = req.user;
     // res.send(user);
-    res.json({ key_id: process.env.RAZORPAY_KEY_ID });
+    res.status(200).json({ key_id: process.env.RAZORPAY_KEY_ID });
   } catch (err) {
     res.status(400).send("ERROR: " + "Invalid token");
   }
