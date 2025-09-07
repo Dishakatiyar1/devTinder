@@ -80,7 +80,7 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
 // just to check whether user is premium or not
 paymentRouter.get("/premium/verify", userAuth, async (req, res) => {
   const user = req.user;
-  if (user.isPremium.toJSON()) {
+  if (user.isPremium) {
     return res.status(200).send({ isPremium: true });
   }
   return res.status(200).send({ isPremium: false });
